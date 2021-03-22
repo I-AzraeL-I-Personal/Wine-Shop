@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Składanie zamówienia{% endblock %}
+
+{% block body %}
+    <div class="row mt-5"></div>
+    <h1 class="h3 mb-3 font-weight-normal">Tworzenie zamówienia</h1>
+    <hr class="my-1">
+    <div class="row mt-5"></div>
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Kategoria</th>
+                <th>Szczegóły</th>
+                <th>Cena</th>
+                <th>Ilość</th>
+                <th>Razem</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>
+                        {% for category in item.product.categories %}
+                            {{ category.name}}<br/>
+                        {% endfor %}
+                    </td>
+                    <td>{{ item.product.description | nl2br }}</td>
+                    <td>{{ item.product.price | format_currency("PLN", locale='pl') }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ (item.product.price * item.quantity) | format_currency("PLN", locale='pl') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" class="text-right">Razem ogółem: </td>
+                <td>{{ total | format_currency("PLN", locale='pl') }}</td>
+                <td colspan="7" class="text-right"></td>
+            </tr>
+            </tfoot>
+        </table>
+    {{ form_start(addressForm) }}
+    {{ form_row(addressForm.city, {
+        label: 'Miasto'
+    }) }}
+    {{ form_row(addressForm.street, {
+        label: 'Ulica'
+    }) }}
+    {{ form_row(addressForm.zipCode, {
+        label: 'Kod pocztowy'
+    }) }}
+    <button class="btn btn-lg btn-primary" type="submit">
+        Zamawiam i płacę
+    </button>
+    {{ form_end(addressForm) }}
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zamówienia{% endblock %}
+
+{% block body %}
+    <div class="row mt-5"></div>
+    <h1 class="h3 mb-3 font-weight-normal">Zamówienia</h1>
+    <hr class="my-1">
+    <div class="row mt-5"></div>
+
+    <style type="text/css">
+        .table{table-layout: fixed;}
+    </style>
+
+    {% if orders | length > 0 %}
+        <table class="table table-hover responsive">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data zamówienia</th>
+                <th>Kwota</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            {% for order in orders %}
+                <tbody>
+                <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-{{ loop.index }}" aria-expanded="false" aria-controls="group-of-rows-{{ loop.index }}">
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.orderDate | date("d.m.Y H:i") }}</td>
+                    <td>{{ order.totalCost | format_currency("PLN", locale='pl') }}</td>
+                    <td>{{ order.status.status }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+                <tbody id="group-of-rows-{{ loop.index }}" class="collapse">
+                <tr class="table-light">
+                    <th>Nazwa</th>
+                    <th>Kategoria</th>
+                    <th>Szczegóły</th>
+                    <th>Cena</th>
+                    <th>Ilość</th>
+                    <th>Razem</th>
+                </tr>
+                {% for item in order.orderItems %}
+                    <tr class="table-light">
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            {% for category in item.product.categories %}
+                                {{ category.name}}
+                            {% endfor %}
+                        </td>
+                        <td>{{ item.product.description | nl2br }}</td>
+                        <td>{{ item.product.price | format_currency("PLN", locale='pl') }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ (item.quantity * item.product.price) | format_currency("PLN", locale='pl') }}</td>
+                    </tr>
+                {% endfor %}
+                <tr class="table-light">
+                    <th>Miasto</th>
+                    <th>Ulica</th>
+                    <th>Kod pocztowy</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr class="table-light">
+                    <td>{{ order.address.city }}</td>
+                    <td>{{ order.address.street }}</td>
+                    <td>{{ order.address.zipCode }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Brak zamówień</p>
+    {% endif %}
+{% endblock %}

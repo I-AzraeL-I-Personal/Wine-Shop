@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rejestracja{% endblock %}
+
+{% block body %}
+    <div class="row mt-5"></div>
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Rejestracja</h1>
+    <hr class="my-1">
+    <div class="row mt-5"></div>
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email, {
+            label: 'E-mail'
+        }) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Hasło'
+        }) }}
+        {{ form_row(registrationForm.fullName, {
+            label: 'Imię i nazwisko'
+        }) }}
+        {{ form_row(registrationForm.phoneNumber, {
+            label: 'Numer telefonu'
+        }) }}
+        {{ form_row(registrationForm.birthDate, {
+            label: 'Data urodzenia'
+        }) }}
+        {{ form_row(registrationForm.address.city, {
+            label: 'Miasto'
+        }) }}
+        {{ form_row(registrationForm.address.street, {
+            label: 'Adres'
+        }) }}
+        {{ form_row(registrationForm.address.zipCode, {
+            label: 'Kod pocztowy'
+        }) }}
+        <button class="btn btn-lg btn-primary" type="submit">
+            Zarejestruj się
+        </button>
+    {{ form_end(registrationForm) }}
+{% endblock %}

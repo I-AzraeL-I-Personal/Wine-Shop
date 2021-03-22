@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oferta{% endblock %}
+
+{% block body %}
+    <div class="row mt-5"></div>
+    <h1 class="h3 mb-3 font-weight-normal">Nasza oferta win</h1>
+    <hr class="my-1">
+    <div class="row mt-3"></div>
+    {{ form_start(filterForm, {'action': path('product'), 'method': 'GET'}) }}
+    {{ form_row(filterForm.color, {
+        label: 'Kolor'
+    }) }}
+    {{ form_row(filterForm.taste, {
+        label: 'Smak'
+    }) }}
+    {{ form_row(filterForm.max, {
+        label: 'Cena do'
+    }) }}
+    {{ form_widget(filterForm) }}
+    <button class="btn btn-sm btn-primary" type="submit">
+        Szukaj
+    </button>
+    {{ form_end(filterForm) }}
+    <div class="row mt-5"></div>
+    {% if products %}
+        {% for row in products | batch(3) %}
+            <div class="row">
+            {% for product in row %}
+                <div class="col-lg-4 d-flex align-items-stretch">
+                    <div class="card">
+                        <img src="{{ asset('images/' ~ product.link) }}" class="card-img-top" alt="">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title mt-auto">{{ product.name }}</h5>
+                            <p class="card-text mt-auto">
+                                {% for category in product.categories %}
+                                    {{ category.name}}<br/>
+                                {% endfor %}
+                            </p>
+                            <p class="card-text mt-auto">{{ product.description | nl2br }}</p>
+                            <p class="card-text mt-auto">{{ product.price | format_currency("PLN", locale='pl') }}</p>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a href="{{ path('cart add', {'id': product.id}) }}" class="btn btn-primary mt-auto">
+                                    Do koszyka
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="row mt-5"></div>
+        {% endfor %}
+    {% else %}
+        <p>Brak produktów</p>
+    {% endif %}
+{% endblock %}

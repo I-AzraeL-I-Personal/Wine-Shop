@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+    <div class="row mt-5"></div>
+    <h1 class="h3 mb-3 font-weight-normal">Dodaj produkt</h1>
+    <hr class="my-1">
+    <div class="row mt-5"></div>
+    {{ form_start(form) }}
+    {{ form_row(form.price, {
+        label: 'Cena'
+    }) }}
+    {{ form_row(form.name, {
+        label: 'Nazwa'
+    }) }}
+    {{ form_row(form.description, {
+        label: 'Opis'
+    }) }}
+    {{ form_row(form.quantity, {
+        label: 'Ilość'
+    }) }}
+    {{ form_row(form.link) }}
+    {{ form_row(form.categories, {
+        label: 'Kategorie'
+    }) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-lg btn-primary" type="submit">
+        Dodaj
+    </button>
+    {{ form_end(form) }}
+{% endblock %}

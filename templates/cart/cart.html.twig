@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Koszyk{% endblock %}
+
+{% block body %}
+    <div class="row mt-5"></div>
+    <h1 class="h3 mb-3 font-weight-normal">Koszyk</h1>
+    <hr class="my-1">
+    <div class="row mt-5"></div>
+    {% if items | length > 0 %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Kategoria</th>
+                <th>Szczegóły</th>
+                <th>Cena</th>
+                <th>Ilość</th>
+                <th>Razem</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>
+                        {% for category in item.product.categories %}
+                            {{ category.name}}<br/>
+                        {% endfor %}
+                    </td>
+                    <td>{{ item.product.description | nl2br }}</td>
+                    <td>{{ item.product.price | format_currency("PLN", locale='pl') }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ (item.product.price * item.quantity) | format_currency("PLN", locale='pl') }}</td>
+                    <td>
+                        <a href="{{ path('cart remove', {'id': item.product.id}) }}" class="btn btn-primary">
+                            Usuń
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-right">Razem ogółem: </td>
+                    <td>{{ total | format_currency("PLN", locale='pl') }}</td>
+                    <td colspan="7" class="text-right"></td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="text-right">
+                        <a href="/order-new" class="btn btn-lg btn-primary">Przejdź do zamówienia</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    {% else %}
+        <p>Brak produktów</p>
+    {% endif %}
+{% endblock %}
